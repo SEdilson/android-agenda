@@ -13,25 +13,28 @@
             android:id="@+id/activity_formulario_aluno_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome"
+            android:hint="@string/nome"
             android:layout_margin="8dp"
-            android:inputType="textCapWords"/>
+            android:inputType="textCapWords"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/activity_formulario_aluno_telefone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Telefone"
+            android:hint="@string/telefone"
             android:layout_margin="8dp"
-            android:inputType="phone"/>
+            android:inputType="phone"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/activity_formulario_aluno_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="E-mail"
+            android:hint="@string/email"
             android:layout_margin="8dp"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:importantForAutofill="no" />
 
     </LinearLayout>
 </ScrollView>
