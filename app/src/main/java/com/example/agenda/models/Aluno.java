@@ -2,24 +2,28 @@ package com.example.agenda.models;
 
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
+@Entity
 public class Aluno implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String nome;
     private String telefone;
     private String email;
+    private Calendar momentoDoCadastro = Calendar.getInstance();
 
-    public Aluno(String nome, String telefone, String email) {
-        this.nome = nome;
-        this.telefone = telefone;
-        this.email = email;
+    public Calendar getMomentoDoCadastro() {
+        return momentoDoCadastro;
     }
 
-    public Aluno() {
-
+    public void setMomentoDoCadastro(Calendar momentoDoCadastro) {
+        this.momentoDoCadastro = momentoDoCadastro;
     }
 
     public int getId() {

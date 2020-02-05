@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
-import com.example.agenda.dao.AlunoDAO;
+import com.example.agenda.database.AgendaDatabase;
+import com.example.agenda.database.dao.RoomAlunoDAO;
 import com.example.agenda.models.Aluno;
 
 import static com.example.agenda.ui.activity.ConstantesActivities.CHAVE_ALUNO;
@@ -23,13 +24,14 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     private EditText campoNome;
     private EditText campoTelefone;
     private EditText campoEmail;
-    private final AlunoDAO dao = new AlunoDAO();
+    private RoomAlunoDAO dao;
     private Aluno aluno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_aluno);
+        dao = AgendaDatabase.getInstance(this).getRoomAlunoDAO();
         inicializacaoDosCampos();
         carregaAluno();
 

@@ -9,7 +9,8 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.agenda.dao.AlunoDAO;
+import com.example.agenda.database.AgendaDatabase;
+import com.example.agenda.database.dao.RoomAlunoDAO;
 import com.example.agenda.models.Aluno;
 import com.example.agenda.ui.adapter.ListaAlunosAdapter;
 
@@ -17,12 +18,13 @@ public class ListaAlunosView {
 
     private final Context context;
     private final ListaAlunosAdapter adapter;
-    private final AlunoDAO dao;
+    private final RoomAlunoDAO dao;
 
     public ListaAlunosView(Context context) {
         this.context = context;
         adapter = new ListaAlunosAdapter(this.context);
-        dao = new AlunoDAO();
+        dao = AgendaDatabase.getInstance(context)
+                .getRoomAlunoDAO();
     }
 
     public void confirmaRemocao(@NonNull final MenuItem item) {
