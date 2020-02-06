@@ -8,7 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.agenda.R;
+import com.example.agenda.database.AgendaDatabase;
+import com.example.agenda.database.dao.RoomTelefoneDAO;
 import com.example.agenda.models.Aluno;
+import com.example.agenda.models.Telefone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,11 @@ import java.util.List;
 public class ListaAlunosAdapter extends BaseAdapter {
     private final List<Aluno> alunos = new ArrayList<>();
     private final Context context;
+    private RoomTelefoneDAO dao;
 
     public ListaAlunosAdapter(Context context) {
         this.context = context;
+        dao = AgendaDatabase.getInstance(context).getRoomTelefoneDAO();
     }
 
     @Override
@@ -48,7 +53,8 @@ public class ListaAlunosAdapter extends BaseAdapter {
         TextView nome = viewCriada.findViewById(R.id.activity_lista_alunos_nome);
         nome.setText(alunoRetornado.getNome());
         TextView telefone = viewCriada.findViewById(R.id.activity_lista_alunos_telefone);
-        telefone.setText(alunoRetornado.getTelefone());
+        Telefone primeiroTelefone = dao.retornaPrimeiroTelefone(alunoRetornado.getId());
+        telefone.setText(primeiroTelefone.getNumero());
     }
 
     private View criaView(ViewGroup viewGroup) {

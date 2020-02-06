@@ -2,7 +2,8 @@
     <string name="app_name">Agenda</string>
     <string name="edilson_name">Edilson</string>
     <string name="nome">Nome</string>
-    <string name="telefone">Telefone</string>
+    <string name="telefone_fixo">Telefone Fixo</string>
+    <string name="telefone_celular">Telefone Celular</string>
     <string name="email">E-mail</string>
     <string name="remover">Remover</string>
     <string name="salvar_aluno">Salvar</string>
