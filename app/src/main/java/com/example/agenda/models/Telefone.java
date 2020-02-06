@@ -20,6 +20,11 @@ public class Telefone {
     @ColumnInfo(name = "aluno_id")
     private int alunoId;
 
+    public Telefone(String numero, TipoTelefone tipo) {
+        this.numero = numero;
+        this.tipo = tipo;
+    }
+
     public int getAlunoId() {
         return alunoId;
     }
