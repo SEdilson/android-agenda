@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
+import com.example.agenda.asynctask.BuscaTodosOsTelefonesDoAlunoTask;
+import com.example.agenda.asynctask.EditaAlunoTask;
+import com.example.agenda.asynctask.SalvaAlunoTask;
 import com.example.agenda.database.AgendaDatabase;
 import com.example.agenda.database.dao.RoomAlunoDAO;
 import com.example.agenda.database.dao.RoomTelefoneDAO;
@@ -75,15 +78,17 @@ public class FormularioAlunoActivity extends AppCompatActivity {
     }
 
     private void preencheCamposTelefone() {
-        telefonesDoAluno = telefoneDAO.retornaTodosOsTelefones(aluno.getId());
-        for (Telefone telefone :
-                telefonesDoAluno) {
-            if(telefone.getTipo() == TipoTelefone.FIXO) {
-                campoTelefoneFixo.setText(telefone.getNumero());
-            } else {
-                campoTelefoneCelular.setText(telefone.getNumero());
+        new BuscaTodosOsTelefonesDoAlunoTask(telefoneDAO, aluno, telefones -> {
+            this.telefonesDoAluno = telefones;
+            for (Telefone telefone :
+                    telefonesDoAluno) {
+                if(telefone.getTipo() == TipoTelefone.FIXO) {
+                    campoTelefoneFixo.setText(telefone.getNumero());
+                } else {
+                    campoTelefoneCelular.setText(telefone.getNumero());
+                }
             }
-        }
+        }).execute();
     }
 
     private void finalizaFormulario() {
@@ -97,43 +102,21 @@ public class FormularioAlunoActivity extends AppCompatActivity {
         } else {
             salvaAluno(telefoneFixo, telefoneCelular);
         }
-        finish();
     }
 
     private void salvaAluno(Telefone telefoneFixo, Telefone telefoneCelular) {
-        int alunoId = alunoDAO.salva(this.aluno).intValue();
-        vinculaTelefones(alunoId, telefoneFixo, telefoneCelular);
-        telefoneDAO.salva(telefoneFixo, telefoneCelular);
+        new SalvaAlunoTask(alunoDAO, aluno, telefoneDAO,
+                telefoneFixo, telefoneCelular, this::finish).execute();
     }
 
     private void editaAluno(Telefone telefoneFixo, Telefone telefoneCelular) {
-        alunoDAO.edita(aluno);
-        atualizaIdsDosTelefones(telefoneFixo, telefoneCelular);
-        vinculaTelefones(aluno.getId(), telefoneFixo, telefoneCelular);
-        telefoneDAO.atualiza(telefoneFixo, telefoneCelular);
-    }
-
-    private void vinculaTelefones(int alunoId, Telefone... telefones) {
-        for (Telefone telefone:
-             telefones) {
-            telefone.setAlunoId(alunoId);
-        }
+        new EditaAlunoTask(alunoDAO, aluno, telefonesDoAluno,
+                telefoneFixo, telefoneCelular, telefoneDAO, this::finish).execute();
     }
 
     private Telefone criaTelefone(EditText campoTelefone, TipoTelefone tipo) {
         String numero = campoTelefone.getText().toString();
         return new Telefone(numero, tipo);
-    }
-
-    private void atualizaIdsDosTelefones(Telefone telefoneFixo, Telefone telefoneCelular) {
-        for (Telefone telefone:
-             telefonesDoAluno) {
-            if(telefone.getTipo() == TipoTelefone.FIXO) {
-                telefoneFixo.setId(telefone.getId());
-            } else {
-                telefoneCelular.setId(telefone.getId());
-            }
-        }
     }
 
     private void inicializacaoDosCampos() {
@@ -145,13 +128,9 @@ public class FormularioAlunoActivity extends AppCompatActivity {
 
     private void preencheAluno() {
         String nome = campoNome.getText().toString();
-        String telefoneFixo = campoTelefoneFixo.getText().toString();
-        String telefoneCelular = campoTelefoneCelular.getText().toString();
         String email = campoEmail.getText().toString();
 
         aluno.setNome(nome);
-//        aluno.setTelefoneFixo(telefoneFixo);
-//        aluno.setTelefoneCelular(telefoneCelular);
         aluno.setEmail(email);
     }
 }

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.agenda.R;
+import com.example.agenda.asynctask.BuscaPrimeiroTelefoneAlunoTask;
 import com.example.agenda.database.AgendaDatabase;
 import com.example.agenda.database.dao.RoomTelefoneDAO;
 import com.example.agenda.models.Aluno;
@@ -52,9 +53,13 @@ public class ListaAlunosAdapter extends BaseAdapter {
     private void vinculaAlunoComViewCriada(View viewCriada, Aluno alunoRetornado) {
         TextView nome = viewCriada.findViewById(R.id.activity_lista_alunos_nome);
         nome.setText(alunoRetornado.getNome());
-        TextView telefone = viewCriada.findViewById(R.id.activity_lista_alunos_telefone);
-        Telefone primeiroTelefone = dao.retornaPrimeiroTelefone(alunoRetornado.getId());
-        telefone.setText(primeiroTelefone.getNumero());
+        final TextView campoTelefone = viewCriada.findViewById(R.id.activity_lista_alunos_telefone);
+        new BuscaPrimeiroTelefoneAlunoTask(dao, alunoRetornado.getId(), new BuscaPrimeiroTelefoneAlunoTask.PrimeiroTelefoneListener() {
+            @Override
+            public void quandoEncontrado(Telefone telefoneEncontrado) {
+                campoTelefone.setText(telefoneEncontrado.getNumero());
+            }
+        }).execute();
     }
 
     private View criaView(ViewGroup viewGroup) {
